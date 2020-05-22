@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[10],{229:function(n,i,e){"use strict";e.r(i);var o=e(54),s=Object(o.a)({},void 0,void 0,!1,null,null,null);s.options.__file="src/Views/main/index.vue",i.default=s.exports}}]);
