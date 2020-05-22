@@ -38,6 +38,7 @@ Vue.axios.interceptors.response.use(response => {
         if (error && error.response) {
             switch (error.response.status) {
                 case 401:
+                    console.log(error.response)
                     Vue.prototype.$notify({
                         title: '提示',
                         message: '登录验证失败',
