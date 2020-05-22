@@ -62,9 +62,9 @@ module.exports = {
 
 
     ],
-    externals: {
-        'vue': 'Vue',
-        // 'element-ui': 'ElEMENT',
-        'element-ui': 'ElementUI',
-    }
+    // externals: {
+    //     'vue': 'Vue',
+    //     // 'element-ui': 'ElEMENT',
+    //     'element-ui': 'ElementUI',
+    // }
 }
