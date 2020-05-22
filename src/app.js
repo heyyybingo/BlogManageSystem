@@ -13,7 +13,7 @@ Vue.use(ElementUI);
 
 // axios
 Vue.use(VueAxios, axios)
-Vue.axios.defaults.baseURL = 'http://127.0.0.1:3000';
+Vue.axios.defaults.baseURL = 'http://101.37.13.10/blog/api';
 
 Vue.axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 // 拦截器
@@ -30,9 +30,11 @@ Vue.axios.interceptors.request.use(
     });
 
 Vue.axios.interceptors.response.use(response => {
+
         return response
     },
     error => {
+
         if (error && error.response) {
             switch (error.response.status) {
                 case 401:
@@ -53,7 +55,14 @@ Vue.axios.interceptors.response.use(response => {
                     break;
 
             }
+            // console.log(error, 1111)
             return error;
+        } else {
+            Vue.prototype.$notify({
+                title: '提示',
+                message: '网络故障！',
+                offset: 100
+            });
         }
     }
 )
