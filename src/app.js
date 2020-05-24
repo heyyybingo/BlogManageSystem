@@ -13,7 +13,7 @@ import VueAxios from 'vue-axios'
 
 // axios
 Vue.use(VueAxios, axios)
-Vue.axios.defaults.baseURL = 'http://101.37.13.10/blog/api';
+Vue.axios.defaults.baseURL = '/api';
 
 Vue.axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 // 拦截器

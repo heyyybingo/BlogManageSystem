@@ -66,23 +66,25 @@ export default {
           let password = this.form.password;
           let data = { userName, password };
           console.log(data);
-          this.axios.post("/login", { userName, password }).then(res => {
-            console.log(res);
-            if (res.status == 200) {
-              // 登录成功
-              // this.router.push("/Home");
-              let token = res.data.data;
-              localStorage.setItem("token", token);
-              const h = this.$createElement;
-              this.$notify({
-                title: "提示",
-                message: h("i", { style: "color: teal" }, "登录成功")
-              });
-              this.$router.push("/Home");
-            } else {
-              throw 1;
-            }
-          });
+          this.axios
+            .post("/account/managerLogin", { userName, password })
+            .then(res => {
+              console.log(res);
+              if (res.status == 200) {
+                // 登录成功
+                // this.router.push("/Home");
+                let token = res.data.data;
+                localStorage.setItem("token", token);
+                const h = this.$createElement;
+                this.$notify({
+                  title: "提示",
+                  message: h("i", { style: "color: teal" }, "登录成功")
+                });
+                this.$router.push("/Home");
+              } else {
+                throw 1;
+              }
+            });
         } else {
           console.log("error submit!!");
           return false;
