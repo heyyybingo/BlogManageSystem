@@ -3,8 +3,12 @@
     <el-container>
       <el-aside width="200px" height="100%">
         <div class="avatar">
-          <el-avatar :size="size" :src="circleUrl"></el-avatar>
+          <div>
+            <el-avatar :size="size" :src="circleUrl"></el-avatar>
+          </div>
+          <el-button size="mini" @click="logout">退出登录</el-button>
         </div>
+
         <el-menu
           :default-active="$route.path"
           class="el-menu-vertical-demo"
@@ -13,12 +17,14 @@
           active-text-color="#ffd04b"
           router="router"
         >
-          <el-menu-item index="/Home/main">首页</el-menu-item>
+          <!-- <el-menu-item index="/Home/main">首页</el-menu-item> -->
           <el-menu-item index="/Home/createArticle">发布文章</el-menu-item>
           <el-menu-item index="/Home/artList">文章列表</el-menu-item>
           <el-menu-item index="/Home/tagList">标签管理</el-menu-item>
           <el-menu-item index="/Home/userManage">用户管理</el-menu-item>
-          <el-menu-item index="/Home/article">文章页面</el-menu-item>
+          <!-- <el-menu-item index="/Home/article">文章页面</el-menu-item> -->
+          <el-menu-item index="/Home/comment">评论管理</el-menu-item>
+          <el-menu-item index="/Home/messageBoard">留言板</el-menu-item>
         </el-menu>
       </el-aside>
 
@@ -37,16 +43,32 @@ export default {
   },
   components: {},
   mounted() {
-    this.$router.push("/Home/createArticle");
+    //
   },
-  methods: {}
+  methods: {
+    logout() {
+      localStorage.removeItem("token");
+      sessionStorage.removeItem("user");
+      this.$router.push("/");
+    }
+  }
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
+* {
+  margin: 0;
+  padding: 0;
+}
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
 .home-container {
   position: absolute;
   height: 100%;
+  width: 100%;
   top: 0;
   left: 0;
   .el-container {
@@ -62,6 +84,10 @@ export default {
       .el-menu {
         border: none;
       }
+    }
+
+    .el-main {
+      width: 100%;
     }
   }
 }

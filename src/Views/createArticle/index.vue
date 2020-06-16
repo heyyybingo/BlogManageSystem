@@ -13,7 +13,8 @@ export default {
       article: {
         title: "helloword",
         tags: [],
-        content: "<h2>I am Example</h2>"
+        content: "<h2>I am Example</h2>",
+        simpleContent: "简要内容输入框"
       }
     };
   },

@@ -1,18 +1,19 @@
 <template>
   <div class="artHeader-container">
-    <el-form :inline="true">
-      <el-form-item label="标题">
-        <el-input :disabled="true" v-model="title"></el-input>
-      </el-form-item>
-      <el-form-item label="浏览量">
-        <el-input :disabled="true" v-model="enters" type="number"></el-input>
-      </el-form-item>
-      <el-form-item label="创建时间">
-        <el-input :disabled="true" v-model="createTime"></el-input>
-      </el-form-item>
-      <el-row>
+    <div class="left">
+      <el-form :inline="true" label-width="100px">
+        <el-form-item label="标题">
+          <el-input :disabled="true" v-model="title"></el-input>
+        </el-form-item>
+        <el-form-item label="浏览量">
+          <el-input :disabled="true" v-model="enters" type="number"></el-input>
+        </el-form-item>
+        <el-form-item label="创建时间">
+          <el-input :disabled="true" v-model="createTime"></el-input>
+        </el-form-item>
+
         <el-form-item label="作者">
-          <el-input :disabled="true" v-model="author"></el-input>
+          <el-input :disabled="true" v-model="author.userName"></el-input>
         </el-form-item>
         <el-form-item label="点赞">
           <el-input :disabled="true" v-model="favs" type="number"></el-input>
@@ -20,9 +21,36 @@
         <el-form-item label="上次更新时间">
           <el-input :disabled="true" v-model="lastUpdateTime"></el-input>
         </el-form-item>
-      </el-row>
+      </el-form>
+      <el-form label-width="100px">
+        <el-form-item label="标签" v-model="tags" :inline="false">
+          <span v-if="tags.length==0" style="line-height:40px;">空</span>
+          <el-tag v-for="(val,i) in tags" :key="i">{{val}}</el-tag>
+        </el-form-item>
+      </el-form>
+    </div>
+    <el-form label-width="100px" class="right">
+      <el-form-item label="简要内容">
+        <el-input type="textarea" :rows="8" :disabled="true" v-model="simpleContent"></el-input>
+      </el-form-item>
     </el-form>
-    <el-dropdown>
+    <el-form class="btn">
+      <el-form-item>
+        <el-button @click="OnUpdate">修改</el-button>
+
+        <el-popconfirm
+          confirmButtonText="好的"
+          cancelButtonText="不用了"
+          icon="el-icon-info"
+          iconColor="red"
+          title="这是一段内容确定删除吗？"
+          @onConfirm="OnRemove"
+        >
+          <el-button slot="reference" type="danger" icon="el-icon-delete" circle></el-button>
+        </el-popconfirm>
+      </el-form-item>
+    </el-form>
+    <!-- <el-dropdown>
       <span class="el-dropdown-link">
         标签列表
         <i class="el-icon-arrow-down el-icon--right"></i>
@@ -30,11 +58,8 @@
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item v-for="(val,i) in tags" :key="i">{{val}}</el-dropdown-item>
       </el-dropdown-menu>
-    </el-dropdown>
-    <div class="btn-right">
-      <el-button @click="OnUpdate">修改</el-button>
-      <el-button type="danger" icon="el-icon-delete" circle @click="OnRemove"></el-button>
-    </div>
+    </el-dropdown>-->
+    <!-- <div class="btn-right"></div> -->
   </div>
 </template>
 
@@ -44,6 +69,7 @@ export default {
     "title",
     "createTime",
     "lastUpdateTime",
+    "simpleContent",
     "favs",
     "enters",
     "author",
@@ -100,27 +126,25 @@ export default {
 <style lang="scss" scoped>
 .artHeader-container {
   position: relative;
-  display: block;
+  display: flex;
+  align-items: flex-start;
+  // justify-content: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
-  height: 150px;
-  width: 100%;
-
+  padding: 1em 0 0 0;
+  width: 1550px;
   .el-form {
-    position: absolute;
-    top: 20px;
-    .el-form-item {
-      margin-left: 60px;
+  }
+  .left {
+    width: 60%;
+    .el-row {
     }
   }
-  .el-dropdown {
-    position: absolute;
-    top: 20px;
-    right: 500px;
+  .right {
+    width: 25%;
   }
-  .btn-right {
-    position: absolute;
-    right: 50px;
-    bottom: 30px;
+  .btn {
+    align-self: flex-end;
+    margin-left: 3em;
   }
 }
 </style>

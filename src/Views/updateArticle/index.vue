@@ -1,5 +1,6 @@
 <template>
   <div class="article-container">
+    <el-page-header @back="goBack" content="修改文章"></el-page-header>
     <art-form :isUpdate="true" :article="article"></art-form>
   </div>
 </template>
@@ -13,12 +14,17 @@ export default {
       article: {
         title: "helloword",
         tags: [],
-        content: "<h2>I am Example</h2>"
+        content: "<h2>I am Example</h2>",
+        simpleContent: "简要内容"
       }
     };
   },
   components: { artForm },
-  methods: {},
+  methods: {
+    goBack() {
+      this.$router.back();
+    }
+  },
   created() {
     let _id = this.$route.query._id;
     let params = { _id };

@@ -2,23 +2,37 @@
   <div class="artForm-container">
     <el-form :model="article" label-width="80px">
       <div class="header-content">
-        <el-form-item label="文章标题">
-          <el-input v-model="article.title"></el-input>
-        </el-form-item>
+        <div class="left">
+          <el-form-item label="文章标题">
+            <el-input v-model="article.title"></el-input>
+          </el-form-item>
 
-        <el-form-item label="标签" v-model="article.tags">
-          <el-tag
-            v-for="(val,key) in article.tags"
-            :key="key"
-            closable
-            @close="OnRemoveTag(key)"
-            style="user-select:none;"
-          >{{val}}</el-tag>
-        </el-form-item>
+          <el-form-item label="标签" v-model="article.tags">
+            <el-tag
+              v-for="(val,key) in article.tags"
+              :key="key"
+              closable
+              @close="OnRemoveTag(key)"
+              style="user-select:none;"
+            >{{val}}</el-tag>
+          </el-form-item>
 
-        <el-form-item label="添加标签">
-          <el-button icon="el-icon-plus" circle @click="drawer = true"></el-button>
-        </el-form-item>
+          <el-form-item label="添加标签">
+            <el-button icon="el-icon-plus" circle @click="drawer = true"></el-button>
+          </el-form-item>
+        </div>
+        <div class="right">
+          <el-form-item label="简要内容">
+            <el-input
+              type="textarea"
+              placeholder="简略内容"
+              :rows="7"
+              v-model="article.simpleContent"
+              maxlength="255"
+              show-word-limit
+            />
+          </el-form-item>
+        </div>
       </div>
       <el-card>
         <mavon-editor
@@ -78,8 +92,6 @@ export default {
 
   components: { mavonEditor },
   methods: {
-   
-
     OnCreate() {
       // alert(
       //   this.article.title +
@@ -90,32 +102,36 @@ export default {
       // );
       let title = this.article.title;
       let tags = this.article.tags;
+      let simpleContent = this.article.simpleContent;
       let content = this.article.content;
-      this.axios.post("/article/create", { title, tags, content }).then(res => {
-        if (res.status == 200) {
-          this.$notify({
-            title: "成功",
-            message: "文章【" + title + "】创建成功",
-            type: "success"
-          });
-          let _id = res.data.data;
-          this.$router.push({
-            path: "/Home/article",
-            query: {
-              _id
-            }
-          });
-        }
-      });
+      this.axios
+        .post("/article/create", { title, tags, content, simpleContent })
+        .then(res => {
+          if (res.status == 200) {
+            this.$notify({
+              title: "成功",
+              message: "文章【" + title + "】创建成功",
+              type: "success"
+            });
+            let _id = res.data.data;
+            this.$router.push({
+              path: "/Home/article",
+              query: {
+                _id
+              }
+            });
+          }
+        });
     },
     OnUpdate() {
       // 更新文章
       let _id = this.article._id;
       let title = this.article.title;
       let tags = this.article.tags;
+      let simpleContent = this.article.simpleContent;
       let content = this.article.content;
       this.axios
-        .post("/article/create", { _id, title, tags, content })
+        .post("/article/create", { _id, title, tags, content, simpleContent })
         .then(res => {
           if (res.status == 200) {
             this.$notify({
@@ -182,7 +198,15 @@ export default {
   padding: 10px 30px 10px 30px;
   width: 1500px;
   .header-content {
-    width: 500px;
+    display: flex;
+
+    .left {
+      width: 60%;
+      // margin-right: 3em;
+    }
+    .right {
+      width: 40%;
+    }
   }
 
   .el-card {

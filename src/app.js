@@ -1,6 +1,9 @@
-// import Vue from "vue"
-// import ElementUI from 'element-ui';
-// import 'element-ui/lib/theme-chalk/index.css';
+import Vue from "vue"
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+
+// 这里为了方便全部引入了，虽然可能引起打包项目比较大，但是总体来说这是一个小项目，不碍事
+Vue.use(ElementUI);
 import router from './router.js' //引入路由
 import app from "./App.vue"
 import axios from 'axios'
@@ -8,8 +11,6 @@ import VueAxios from 'vue-axios'
 
 
 
-// 这里为了方便全部引入了，虽然可能引起打包项目比较大，但是总体来说这是一个小项目，不碍事
-// Vue.use(ElementUI);
 
 // axios
 Vue.use(VueAxios, axios)
@@ -44,6 +45,7 @@ Vue.axios.interceptors.response.use(response => {
                         message: '登录验证失败',
                         offset: 100
                     });
+                    sessionStorage.setItem("force", true)
                     router.push('/login');
                     break;
                 case 500:
@@ -56,8 +58,8 @@ Vue.axios.interceptors.response.use(response => {
                     break;
 
             }
-            // console.log(error, 1111)
-            return error;
+            console.log("拦截器", error)
+            throw error;
         } else {
             Vue.prototype.$notify({
                 title: '提示',

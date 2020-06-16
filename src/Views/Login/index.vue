@@ -41,24 +41,34 @@ export default {
   },
   components: {},
   created() {
-    let token = localStorage.getItem("token");
-    if (token != "" || token != undefined) {
-      // 以前登录过，验证token有没有过期
-      this.axios.post("/testLogin").then(res => {
-        if (res.status == 200) {
-          const h = this.$createElement;
-          this.$notify({
-            title: "提示",
-            message: h("i", { style: "color: teal" }, "登录成功")
-          });
-          this.$router.push("/Home");
-        }
-      });
-    } else {
-      console.log("第一次登录");
+    if (sessionStorage.getItem("force")) {
+      // 如果是强制登出的就不自动登录
+      return;
     }
+    this.login();
   },
   methods: {
+    login() {
+      let token = localStorage.getItem("token");
+      console.log("token", token);
+      if (token) {
+        // 以前登录过，验证token有没有过期
+        this.axios.post("/testLogin").then(res => {
+          if (res.status == 200) {
+            const h = this.$createElement;
+            this.$notify({
+              title: "提示",
+              message: h("i", { style: "color: teal" }, "登录成功")
+            });
+            console.log(res.data.data);
+            sessionStorage.setItem("user", JSON.stringify(res.data.data));
+            this.$router.push("/Home");
+          }
+        });
+      } else {
+        console.log("第一次登录");
+      }
+    },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -75,15 +85,23 @@ export default {
                 // this.router.push("/Home");
                 let token = res.data.data;
                 localStorage.setItem("token", token);
-                const h = this.$createElement;
-                this.$notify({
-                  title: "提示",
-                  message: h("i", { style: "color: teal" }, "登录成功")
-                });
-                this.$router.push("/Home");
+                this.login();
+                // const h = this.$createElement;
+                // this.$notify({
+                //   title: "提示",
+                //   message: h("i", { style: "color: teal" }, "登录成功")
+                // });
+                // sessionStorage.setItem("user", JSON.stringify(res.data.data));
+                // this.$router.push("/Home");
               } else {
                 throw 1;
               }
+            })
+            .catch(err => {
+              if (err.response && err.response.status == 403) {
+                this.$message.error("用户名或密码错误");
+              }
+              console.log(err);
             });
         } else {
           console.log("error submit!!");

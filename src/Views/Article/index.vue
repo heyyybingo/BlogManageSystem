@@ -1,14 +1,16 @@
 <template>
   <div class="article-container">
+    <el-page-header @back="goBack" content="文章详情"></el-page-header>
     <artHeader
       :title="article.title"
       :createTime="article.createTime"
       :lastUpdateTime="article.lastUpdateTime"
       :favs="article.favs"
       :enters="article.enters"
-      :author="author"
+      :author="article.author"
       :tags="article.tags"
       :_id="article._id"
+      :simpleContent="article.simpleContent"
     ></artHeader>
     <artContent :content="article.content"></artContent>
   </div>
@@ -17,6 +19,7 @@
 <script type="text/ecmascript-6">
 import artHeader from "./articleHead/artHeader.vue";
 import artContent from "./articleContent/artContent.vue";
+import { mavonEditor } from "mavon-editor";
 export default {
   name: "",
   data() {
@@ -26,23 +29,25 @@ export default {
     };
   },
   components: { artHeader, artContent },
-  methods: {},
+  methods: {
+    goBack() {
+      this.$router.back();
+    }
+  },
   created() {
     let _id = this.$route.query._id;
     let params = { _id };
     this.axios
-      .get("/article/query", { params } )
+      .get("/article/query", { params })
       .then(res => {
         if (res.status == 200) {
           this.article = res.data.data;
-          let authorId = this.article.authorId;
-          let params = { authorId };
-          return this.axios.get("/manager/getAuthor", { params });
-        }
-      })
-      .then(res => {
-        if (res.status == 200) {
-          this.author = res.data.data;
+          let md = mavonEditor.getMarkdownIt();
+
+          this.article.content = md.render(this.article.content);
+          console.log(this.article);
+          //
+          // let params = { authorId };
         }
       })
       .catch(err => {
@@ -56,4 +61,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.article-container {
+  .el-page-header {
+    padding: 1em 0 1em 0;
+  }
+}
 </style>

@@ -1,18 +1,31 @@
 <template>
   <div class="artContent-container">
-    <div v-html="content"></div>
+    <div v-highlight v-html="content"></div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+// import "github-markdown-css";
+
+import hljs from "highlight.js";
 export default {
   props: ["content"],
   name: "",
   data() {
     return {};
   },
+  computed: {},
   components: {},
-  methods: {}
+  methods: {},
+  created() {},
+  directives: {
+    highlight: el => {
+      let blocks = el.querySelectorAll("pre code");
+      blocks.forEach(block => {
+        hljs.highlightBlock(block);
+      });
+    }
+  }
 };
 </script>
 
