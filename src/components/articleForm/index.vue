@@ -136,7 +136,7 @@ export default {
           if (res.status == 200) {
             this.$notify({
               title: "成功",
-              message: "文章【" + title + "】创建成功",
+              message: "文章【" + title + "】更新成功",
               type: "success"
             });
             let _id = res.data.data;
