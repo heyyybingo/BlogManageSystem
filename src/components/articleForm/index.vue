@@ -131,7 +131,7 @@ export default {
       let simpleContent = this.article.simpleContent;
       let content = this.article.content;
       this.axios
-        .post("/article/create", { _id, title, tags, content, simpleContent })
+        .post("/article/update", { _id, title, tags, content, simpleContent })
         .then(res => {
           if (res.status == 200) {
             this.$notify({

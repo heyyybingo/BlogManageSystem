@@ -25,7 +25,7 @@
                   icon="el-icon-info"
                   iconColor="red"
                   title="这是一段内容确定删除吗？"
-                  @onConfirm="onRemoveReply(replies.row._id)"
+                  @onConfirm="onRemoveReply(props.row._id,replies.row._id)"
                 >
                   <el-button slot="reference" type="danger" circle size="small">删除</el-button>
                 </el-popconfirm>
@@ -78,8 +78,8 @@ export default {
   },
   components: {},
   methods: {
-    onRemoveReply(replyId) {
-      let data = { replyId };
+    onRemoveReply(commentId, replyId) {
+      let data = { replyId, commentId };
       this.axios
         .post("/comRep/removeReply", data)
         .then(res => {
@@ -105,9 +105,43 @@ export default {
         });
     },
     onRemoveComment(commentId) {
+      if (isArt) {
+        this.onRemoveArtComment(commentId);
+      } else {
+        this.onRemoveMsComment(commentId);
+      }
+    },
+    onRemoveArtComment(commentId) {
       let data = { commentId };
       this.axios
         .post("/comRep/removeComment", data)
+        .then(res => {
+          if (res.status == 200) {
+            this.$message({
+              type: "success",
+              message: "删除成功"
+            });
+          }
+          if (this.isArt) {
+            this.reload();
+          } else {
+            this.$emit("commentReload");
+          }
+        })
+        .catch(err => {
+          if (err.response && err.response.status == 404) {
+            this.$message.error({
+              message: "删除失败"
+            });
+          }
+          console.log(err);
+        });
+    },
+    onRemoveMsComment(commentId) {
+      let boardId = this._id;
+      let data = { commentId, boardId };
+      this.axios
+        .post("/messageBoard/removeComments", data)
         .then(res => {
           if (res.status == 200) {
             this.$message({
